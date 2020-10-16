@@ -60,12 +60,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
             View view       = inflater.inflate(R.layout.row_add_item, container, false);
 
 
-            //recupera dados de data e horario da DateTimeActivity
-            Bundle bundle = getArguments();
-            if(bundle != null){
-                date = bundle.getString("date");
-                txtDateTime.setText(date);
-            }
+
 
 
             //findViewById
@@ -132,6 +127,21 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return view;
 
    }
+
+    @SuppressLint("RestrictedApi")
+    @Override
+    public void onResume() {
+        //recupera dados de data e horario da DateTimeActivity
+        Bundle bundle = this.getArguments();
+        if(bundle != null){
+            time = bundle.getString("time");
+            Log.d(TAG, "Data: " + time + "**************");
+
+        }
+
+        Log.d(TAG, "Teste");
+        super.onResume();
+    }
 
     //função para adicionar a tarefa no Firebase
    private void addTask(String text){

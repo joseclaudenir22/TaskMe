@@ -28,7 +28,7 @@ public class DateTimeActivity extends AppCompatActivity {
     Button          btnHorario, btnOk, btnCancel;
     int             hora , minuto;
     String          horario = "";
-    String          date    = "12";
+    String          date ;
     CalendarView    calendarView;
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -98,15 +98,13 @@ public class DateTimeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                Log.d(TAG, date);
                 //Envia dados para a BottomSheet
-
+                DialogFragment dFragment = new DialogFragment();
                 Bundle bundleBS = new Bundle();
                 bundleBS.putString("time", horario);
                 bundleBS.putString("date", String.valueOf(date));
-                BottomSheetDialogFragment bottomSheet = new BottomSheetDialogFragment();
-                bottomSheet.setArguments(bundleBS);
-                bottomSheet.show(getSupportFragmentManager(),"TAG");
-                BottomSheet bottomSheet = r
+                dFragment.setArguments(bundleBS);
                 finish();
 
             }

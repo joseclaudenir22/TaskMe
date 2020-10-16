@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
         recyclerView    = findViewById(R.id.recyclerView);
 
-
+        //chama a bottomsheet pelo FAB
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
