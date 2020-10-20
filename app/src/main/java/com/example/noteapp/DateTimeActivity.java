@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -26,8 +27,8 @@ import java.util.Calendar;
 public class DateTimeActivity extends AppCompatActivity {
 
     Button          btnHorario, btnOk, btnCancel;
-    int             hora , minuto;
-    String          horario = "";
+    int             hour , minute;
+    String          time ;
     String          date ;
     CalendarView    calendarView;
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -59,18 +60,18 @@ public class DateTimeActivity extends AppCompatActivity {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                 //atribui hora e minuto
-                                hora    = hourOfDay;
-                                minuto  = minute;
+                                hour    = hourOfDay;
+                                minute  = minute;
 
                                 //inicia o calendário
                                 Calendar calendar = Calendar.getInstance();
 
                                 //set a hora e o minuto
-                                calendar.set(0,0,0,hora, minuto);
+                                calendar.set(0,0,0,hour, minute);
 
                                 //atribui no texto hora e minuto
                                 btnHorario.setText(DateFormat.format("hh:mm aa", calendar));
-                                horario     = btnHorario.getText().toString();
+                                time     = btnHorario.getText().toString();
                             }
                         },12,0,true
                 );
@@ -78,7 +79,7 @@ public class DateTimeActivity extends AppCompatActivity {
 
 
                 //Mostra o horário selecionado assim que o TimePicker foi reaberto
-                timePickerDialog.updateTime(hora, minuto);
+                timePickerDialog.updateTime(hour, minute);
 
                 //Mostra Dialog
                 timePickerDialog.show();
@@ -98,22 +99,17 @@ public class DateTimeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Log.d(TAG, date);
                 //Envia dados para a BottomSheet
-                DialogFragment dFragment = new DialogFragment();
-                Bundle bundleBS = new Bundle();
-                bundleBS.putString("time", horario);
-                bundleBS.putString("date", String.valueOf(date));
-                dFragment.setArguments(bundleBS);
-                finish();
+                Intent sendData = new Intent(getApplicationContext(), MainActivity.class);
+                sendData.putExtra("date", date);
+                sendData.putExtra("time", time);
+                startActivity(sendData);
+
+
 
             }
         });
 
-
     }
-
-
-
 
 }

@@ -7,6 +7,8 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.base.MoreObjects;
@@ -24,14 +26,16 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
 
     private static final String TAG = "MainActivity";
     RecyclerView recyclerView;
-
+    String date, time;
     Button btnTime;
+    private BottomSheetDialog bottomSheetDialog;
 
 
     @Override
@@ -43,13 +47,23 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
         recyclerView    = findViewById(R.id.recyclerView);
 
+        //cria instância do bottomSheet
+        bottomSheetDialog = new BottomSheetDialog(MainActivity.this);
+        View bottomSheetDialogView = getLayoutInflater().inflate(R.layout.bottom_sheet_persistent, null);
+        bottomSheetDialog.setContentView(bottomSheetDialogView);
+
+        //componentes da bottomSheet
+        btnTime     = (Button) bottomSheetDialogView.findViewById(R.id.btnDatePicker);
+
+
+
         //chama a bottomsheet pelo FAB
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               BottomSheet bottomSheet = new BottomSheet();
-               bottomSheet.show(getSupportFragmentManager(), "TAG");
+
+               bottomSheetDialog.show();
 
             }
         });
@@ -119,6 +133,15 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     @Override
     protected void onStart() {
+        //botão para iniciar DateTimeAcitivy
+        btnTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent datetime = new Intent(MainActivity.this, DateTimeActivity.class);
+                startActivity(datetime);
+            }
+        });
+
         super.onStart();
         FirebaseAuth.getInstance().addAuthStateListener(this);
     }
@@ -127,6 +150,21 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     protected void onStop() {
         super.onStop();
         FirebaseAuth.getInstance().removeAuthStateListener(this);
+    }
+
+
+    @Override
+    protected void onResume() {
+
+       /* Bundle receiveData = getIntent().getExtras();
+        if(receiveData != null) {
+            date = receiveData.getString("date");
+            time = receiveData.getString("time");
+            String teste = bottomSheet.getTxtDateTime().toString();
+
+            Log.d(TAG, "Data:" + date + "*****" + "Horário: "  + teste  + "****");
+        } */
+        super.onResume();
     }
 
     //Listener para verificar se o usuário é null
@@ -141,4 +179,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         Log.d(TAG, "onAuthStateChanged: userUid " + firebaseAuth.getCurrentUser().getUid());
 
     }
+
+
 }

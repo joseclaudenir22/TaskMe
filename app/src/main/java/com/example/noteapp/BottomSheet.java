@@ -1,42 +1,31 @@
 package com.example.noteapp;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentTransaction;
 
 
-import com.example.noteapp.databinding.RowAddItemBinding;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.type.DateTime;
-
-import java.util.Calendar;
 
 import static com.firebase.ui.auth.AuthUI.TAG;
 
@@ -47,19 +36,28 @@ public class BottomSheet extends BottomSheetDialogFragment {
     Button      btnTime;
     Button      datepicker;
     EditText    taskName;
-    TextView    txtDateTime;
+    private TextView   txtDateTime;
     String      date, time, visibility;
+
+    public TextView getTxtDateTime() {
+        return txtDateTime;
+    }
+
+    public void setTxtDateTime(TextView txtDateTime) {
+        this.txtDateTime = txtDateTime;
+    }
+
+
 
 
     public BottomSheet(){}
+
 
     @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View view       = inflater.inflate(R.layout.row_add_item, container, false);
-
-
+            View view       = inflater.inflate(R.layout.bottomsheet_layout, container, false);
 
 
 
@@ -68,7 +66,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
             taskName    = view.findViewById(R.id.taskName);
             txtDateTime = view.findViewById(R.id.txtDateTime);
             datepicker  = view.findViewById(R.id.datepicker);
-            //txtDateTime.setText(date);
+
             taskName.requestFocus();
 
 
@@ -115,11 +113,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 @Override
                 public void onClick(View v) {
 
-                    Bundle bundle = getArguments();
-                    if(bundle != null){
-                        date = bundle.getString("date");
-                        Log.d("TAG", "DATA é: " + date + "***********************************");
-                    }
+
                 }
             });
 
@@ -128,22 +122,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
    }
 
-    @SuppressLint("RestrictedApi")
-    @Override
-    public void onResume() {
-        //recupera dados de data e horario da DateTimeActivity
-        Bundle bundle = this.getArguments();
-        if(bundle != null){
-            time = bundle.getString("time");
-            Log.d(TAG, "Data: " + time + "**************");
-
-        }
-
-        Log.d(TAG, "Teste");
-        super.onResume();
-    }
-
-    //função para adicionar a tarefa no Firebase
+   //função para adicionar a tarefa no Firebase
    private void addTask(String text){
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -168,4 +147,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
    }
 
+    @Override
+    public void onResume() {
+
+        super.onResume();
+    }
 }
