@@ -1,4 +1,4 @@
-package com.example.noteapp;
+/*package com.example.noteapp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -32,12 +32,12 @@ import static com.firebase.ui.auth.AuthUI.TAG;
 
 public class BottomSheet extends BottomSheetDialogFragment {
 
-    Button      btnAdd;
-    Button      btnTime;
-    Button      datepicker;
-    EditText    taskName;
-    private TextView   txtDateTime;
-    String      date, time, visibility;
+    Button btnAdd;
+    Button btnTime;
+    Button datepicker;
+    EditText taskName;
+    private TextView txtDateTime;
+    String date, time, visibility;
 
     public TextView getTxtDateTime() {
         return txtDateTime;
@@ -48,20 +48,18 @@ public class BottomSheet extends BottomSheetDialogFragment {
     }
 
 
-
-
-    public BottomSheet(){}
+    public BottomSheet() {
+    }
 
 
     @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View view       = inflater.inflate(R.layout.bottomsheet_layout, container, false);
+        // View view       = inflater.inflate(R.layout.bottomsheet_layout, container, false);
 
 
-
-            //findViewById
+        //findViewById
             btnAdd      = view.findViewById(R.id.btnAddItem);
             taskName    = view.findViewById(R.id.taskName);
             txtDateTime = view.findViewById(R.id.txtDateTime);
@@ -152,4 +150,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         super.onResume();
     }
-}
+
+    }
+}*/

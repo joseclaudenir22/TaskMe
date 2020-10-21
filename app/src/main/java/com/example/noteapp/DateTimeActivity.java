@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -34,13 +36,12 @@ public class DateTimeActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_time);
         this.setFinishOnTouchOutside(true);
-
-
 
 
 
@@ -100,15 +101,16 @@ public class DateTimeActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //Envia dados para a BottomSheet
-                Intent sendData = new Intent(getApplicationContext(), MainActivity.class);
-                sendData.putExtra("date", date);
-                sendData.putExtra("time", time);
-                startActivity(sendData);
-
-
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                intent.putExtra("date", date);
+                startActivity(intent);
 
             }
         });
+
+    }
+
+    public void clear(){
 
     }
 

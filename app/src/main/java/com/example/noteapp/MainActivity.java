@@ -1,6 +1,8 @@
 package com.example.noteapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.firebase.ui.auth.AuthUI;
@@ -26,15 +28,20 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
 
     private static final String TAG = "MainActivity";
     RecyclerView recyclerView;
     String date, time;
+    TextView txtDateTime;
     Button btnTime;
+    EditText taskName;
     private BottomSheetDialog bottomSheetDialog;
 
 
@@ -54,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
         //componentes da bottomSheet
         btnTime     = (Button) bottomSheetDialogView.findViewById(R.id.btnDatePicker);
-
+        txtDateTime = (TextView) bottomSheetDialogView.findViewById(R.id.txtDateTime);
+        taskName    = (EditText) bottomSheetDialogView.findViewById(R.id.taskName);
 
 
         //chama a bottomsheet pelo FAB
@@ -63,8 +71,18 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
             @Override
             public void onClick(View view) {
 
-               bottomSheetDialog.show();
+                bottomSheetDialog.show();
+                taskName.requestFocus();
 
+            }
+        });
+
+        //botão para iniciar DateTimeAcitivy
+        btnTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent datetime = new Intent(MainActivity.this, DateTimeActivity.class);
+                startActivity(datetime);
             }
         });
 
@@ -133,21 +151,13 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     @Override
     protected void onStart() {
-        //botão para iniciar DateTimeAcitivy
-        btnTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent datetime = new Intent(MainActivity.this, DateTimeActivity.class);
-                startActivity(datetime);
-            }
-        });
-
         super.onStart();
         FirebaseAuth.getInstance().addAuthStateListener(this);
     }
 
     @Override
     protected void onStop() {
+
         super.onStop();
         FirebaseAuth.getInstance().removeAuthStateListener(this);
     }
@@ -156,15 +166,19 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     @Override
     protected void onResume() {
 
-       /* Bundle receiveData = getIntent().getExtras();
-        if(receiveData != null) {
-            date = receiveData.getString("date");
-            time = receiveData.getString("time");
-            String teste = bottomSheet.getTxtDateTime().toString();
-
-            Log.d(TAG, "Data:" + date + "*****" + "Horário: "  + teste  + "****");
-        } */
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            String value = extras.getString("date");
+            txtDateTime.setText(value);
+            taskName.requestFocus();
+            bottomSheetDialog.show();
+        }
         super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     //Listener para verificar se o usuário é null
