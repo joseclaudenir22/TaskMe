@@ -101,9 +101,10 @@ public class DateTimeActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //Envia dados para a BottomSheet
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                intent.putExtra("date", date);
-                startActivity(intent);
+                Intent sendData = new Intent(getBaseContext(), MainActivity.class);
+                sendData.putExtra("date", date);
+                sendData.putExtra("time", time);
+                startActivity(sendData);
 
             }
         });

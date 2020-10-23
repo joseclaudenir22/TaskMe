@@ -1,13 +1,12 @@
 package com.example.noteapp;
 
-import com.google.firebase.Timestamp;
 
 public class Task {
 
     private String  text;
     private String  userId;
-   // private String  time;
-   // private String  date;
+    private String  time;
+    private String  date;
     private boolean completed;
 
     public Task(String text, boolean b, String userId) {
@@ -17,26 +16,25 @@ public class Task {
         this.text       = text;
         this.completed  = completed;
         this.userId     = userId;
-        //this.time       = time;
-        //this.date       = date;
+        this.time       = time;
+        this.date       = date;
     }
 
-    /*public String getTime() {
-       // return time;
+    public String getTime() {
+       return time;
     }
 
     public void setTime(String time) {
-        //this.time = time;
+        this.time = time;
     }
 
     public String getDate() {
-        //return date;
+        return date;
     }
 
     public void setDate(String date) {
-        //this.date = date;
-    } */
-
+        this.date = date;
+    }
     public String getText() {
         return text;
     }
@@ -66,8 +64,8 @@ public class Task {
         return "Task{" +
                 "text='" + text + '\'' +
                 ", userId='" + userId + '\'' +
-          //      ", time='" + time + '\'' +
-           //     ", date='" + date + '\'' +
+                ", time='" + time + '\'' +
+                ", date='" + date + '\'' +
                 ", completed=" + completed +
                 '}';
     }

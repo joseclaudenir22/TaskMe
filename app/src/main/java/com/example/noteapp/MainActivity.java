@@ -1,5 +1,6 @@
 package com.example.noteapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,8 +8,8 @@ import android.os.Bundle;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -16,6 +17,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.common.base.MoreObjects;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     RecyclerView recyclerView;
     String date, time;
     TextView txtDateTime;
-    Button btnTime;
+    Button btnTime, btnAdd;
     EditText taskName;
     private BottomSheetDialog bottomSheetDialog;
 
@@ -56,13 +59,14 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
         //cria instância do bottomSheet
         bottomSheetDialog = new BottomSheetDialog(MainActivity.this);
-        View bottomSheetDialogView = getLayoutInflater().inflate(R.layout.bottom_sheet_persistent, null);
+        final View bottomSheetDialogView = getLayoutInflater().inflate(R.layout.bottom_sheet_persistent, null);
         bottomSheetDialog.setContentView(bottomSheetDialogView);
 
         //componentes da bottomSheet
         btnTime     = (Button) bottomSheetDialogView.findViewById(R.id.btnDatePicker);
         txtDateTime = (TextView) bottomSheetDialogView.findViewById(R.id.txtDateTime);
         taskName    = (EditText) bottomSheetDialogView.findViewById(R.id.taskName);
+        btnAdd      = (Button) bottomSheetDialogView.findViewById(R.id.btnAdd);
 
 
         //chama a bottomsheet pelo FAB
@@ -74,6 +78,26 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                 bottomSheetDialog.show();
                 taskName.requestFocus();
 
+            }
+        });
+
+
+        //recebe dados da DateTimeAcitivity
+        Bundle receiveDate = getIntent().getExtras();
+        if(receiveDate != null){
+            date = receiveDate.getString("date");
+            time = receiveDate.getString("time");
+            txtDateTime.setText(date + " - " + time);
+            taskName.requestFocus();
+            bottomSheetDialog.show();
+        }
+
+        //adiciona tarefa no Firebase
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTask(taskName.getText().toString());
+                bottomSheetDialog.dismiss();
             }
         });
 
@@ -165,14 +189,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     @Override
     protected void onResume() {
-
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            String value = extras.getString("date");
-            txtDateTime.setText(value);
-            taskName.requestFocus();
-            bottomSheetDialog.show();
-        }
         super.onResume();
     }
 
@@ -191,6 +207,31 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         }
 
         Log.d(TAG, "onAuthStateChanged: userUid " + firebaseAuth.getCurrentUser().getUid());
+
+    }
+
+    //função para adicionar a tarefa no Firebase
+    private void addTask(String text){
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Task task = new Task(text, false, userId, time, date);
+
+        FirebaseFirestore.getInstance()
+                .collection("tasks")
+                .add(task)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @SuppressLint("RestrictedApi")
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "onSuccess: Task succesfully created");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplication(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
     }
 

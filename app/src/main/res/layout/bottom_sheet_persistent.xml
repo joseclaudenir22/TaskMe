@@ -41,7 +41,7 @@
         android:id="@+id/txtDateTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Teste"
+        android:text=""
         android:layout_marginLeft="16dp"
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,6 +61,7 @@
         />
 
     <Button
+        android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/Widget.AppCompat.Button.Borderless"
