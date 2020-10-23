@@ -41,10 +41,10 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     private static final String TAG = "MainActivity";
     RecyclerView recyclerView;
-    String date, time;
+    String date, time,taskName;
     TextView txtDateTime;
     Button btnTime, btnAdd;
-    EditText taskName;
+    EditText editTextTaskName;
     private BottomSheetDialog bottomSheetDialog;
 
 
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         //componentes da bottomSheet
         btnTime     = (Button) bottomSheetDialogView.findViewById(R.id.btnDatePicker);
         txtDateTime = (TextView) bottomSheetDialogView.findViewById(R.id.txtDateTime);
-        taskName    = (EditText) bottomSheetDialogView.findViewById(R.id.taskName);
+        editTextTaskName    = (EditText) bottomSheetDialogView.findViewById(R.id.taskName);
         btnAdd      = (Button) bottomSheetDialogView.findViewById(R.id.btnAdd);
 
 
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
             public void onClick(View view) {
 
                 bottomSheetDialog.show();
-                taskName.requestFocus();
+                
 
             }
         });
@@ -87,8 +87,10 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         if(receiveDate != null){
             date = receiveDate.getString("date");
             time = receiveDate.getString("time");
+            taskName = receiveDate.getString("taskName");
+            editTextTaskName.setText(taskName );
             txtDateTime.setText(date + " - " + time);
-            taskName.requestFocus();
+            editTextTaskName.requestFocus();
             bottomSheetDialog.show();
         }
 
@@ -96,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addTask(taskName.getText().toString());
+                addTask(editTextTaskName.getText().toString());
                 bottomSheetDialog.dismiss();
             }
         });
@@ -105,7 +107,9 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         btnTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent datetime = new Intent(MainActivity.this, DateTimeActivity.class);
+                datetime.putExtra("taskName", editTextTaskName.getText());
                 startActivity(datetime);
             }
         });
@@ -125,9 +129,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         }*/
     }
 
-    private void addNote(String text){
-
-    }
 
     private void startLoginActivity() {
         Intent intent = new Intent( this, LoginRegisterActivity.class);
@@ -234,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                 });
 
     }
+
 
 
 }

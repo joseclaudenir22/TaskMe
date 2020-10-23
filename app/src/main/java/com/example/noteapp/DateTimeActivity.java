@@ -32,6 +32,7 @@ public class DateTimeActivity extends AppCompatActivity {
     int             hour , minute;
     String          time ;
     String          date ;
+    String          taskName;
     CalendarView    calendarView;
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -42,8 +43,9 @@ public class DateTimeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_time);
         this.setFinishOnTouchOutside(true);
+        Bundle bundle = getIntent().getExtras();
 
-
+        taskName = bundle.getString("taskName");
 
         //atribuições elementos
         btnHorario  = findViewById(R.id.btnTime);
@@ -104,14 +106,11 @@ public class DateTimeActivity extends AppCompatActivity {
                 Intent sendData = new Intent(getBaseContext(), MainActivity.class);
                 sendData.putExtra("date", date);
                 sendData.putExtra("time", time);
+                sendData.putExtra("taskName", taskName);
                 startActivity(sendData);
 
             }
         });
-
-    }
-
-    public void clear(){
 
     }
 
