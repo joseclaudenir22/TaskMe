@@ -14,15 +14,19 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
@@ -30,11 +34,10 @@ public class DateTimeActivity extends AppCompatActivity {
 
     Button          btnHorario, btnOk, btnCancel;
     int             hour , minute;
-    String          time ;
-    String          date ;
+    private String  time = " ", date = " ";
     CalendarView    calendarView;
     private static final String TAG = MainActivity.class.getSimpleName();
-
+    TextView datetimeMA;
 
 
     @Override
@@ -43,7 +46,9 @@ public class DateTimeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_date_time);
         this.setFinishOnTouchOutside(true);
 
-
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.activity_main, null);
+        datetimeMA = (TextView) findViewById(R.id.txtDateTime);
 
         //atribuições elementos
         btnHorario  = findViewById(R.id.btnTime);
@@ -101,18 +106,33 @@ public class DateTimeActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //Envia dados para a BottomSheet
-                Intent sendData = new Intent(getBaseContext(), MainActivity.class);
-                sendData.putExtra("date", date);
-                sendData.putExtra("time", time);
-                startActivity(sendData);
+                setDate(date);
+                setTime(time);
+                datetimeMA.setText(date + " - " + time);
+                finish();
 
             }
         });
 
     }
 
-    public void clear(){
-
+    public String getTime() {
+        return time;
     }
 
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void ChangeText(TextView textView){
+        textView.setText(date + " - " + time);
+    }
 }

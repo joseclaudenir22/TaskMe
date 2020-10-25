@@ -1,6 +1,7 @@
 package com.example.noteapp;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,13 +32,17 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
-public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
+import java.text.DateFormat;
+import java.util.Calendar;
+
+public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener, DatePickerDialog.OnDateSetListener {
 
     private static final String TAG = "MainActivity";
     RecyclerView recyclerView;
@@ -46,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     Button btnTime, btnAdd;
     EditText taskName;
     private BottomSheetDialog bottomSheetDialog;
+    DateTimeActivity dateTimeActivity;
 
 
     @Override
@@ -82,16 +88,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         });
 
 
-        //recebe dados da DateTimeAcitivity
-        Bundle receiveDate = getIntent().getExtras();
-        if(receiveDate != null){
-            date = receiveDate.getString("date");
-            time = receiveDate.getString("time");
-            txtDateTime.setText(date + " - " + time);
-            taskName.requestFocus();
-            bottomSheetDialog.show();
-        }
-
         //adiciona tarefa no Firebase
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,8 +101,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         btnTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent datetime = new Intent(MainActivity.this, DateTimeActivity.class);
-                startActivity(datetime);
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "date picker");
             }
         });
 
@@ -188,9 +184,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
+    protected void onResume() { super.onResume(); }
 
     @Override
     protected void onDestroy() {
@@ -213,6 +207,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     //função para adicionar a tarefa no Firebase
     private void addTask(String text){
 
+        date = dateTimeActivity.getDate();
+        time = dateTimeActivity.getTime();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Task task = new Task(text, false, userId, time, date);
 
@@ -235,5 +231,15 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     }
 
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        String currentDate = DateFormat.getInstance().format(calendar.getTime());
 
+        txtDateTime.setText(currentDate);
+
+    }
 }
