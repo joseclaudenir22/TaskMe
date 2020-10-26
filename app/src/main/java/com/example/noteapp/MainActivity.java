@@ -2,9 +2,11 @@ package com.example.noteapp;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.firebase.ui.auth.AuthUI;
@@ -27,6 +29,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -35,14 +38,16 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener, DatePickerDialog.OnDateSetListener {
+public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
 
     private static final String TAG = "MainActivity";
     RecyclerView recyclerView;
@@ -51,8 +56,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     Button btnTime, btnAdd;
     EditText taskName;
     private BottomSheetDialog bottomSheetDialog;
-    DateTimeActivity dateTimeActivity;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +104,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         btnTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment datePicker = new DatePickerFragment();
-                datePicker.show(getSupportFragmentManager(), "date picker");
+                showDateTimeDialog();
             }
         });
 
@@ -171,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     @Override
     protected void onStart() {
+        taskName.requestFocus();
         super.onStart();
         FirebaseAuth.getInstance().addAuthStateListener(this);
     }
@@ -184,7 +187,10 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
 
     @Override
-    protected void onResume() { super.onResume(); }
+    protected void onResume() {
+        taskName.requestFocus();
+        super.onResume();
+    }
 
     @Override
     protected void onDestroy() {
@@ -207,8 +213,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     //função para adicionar a tarefa no Firebase
     private void addTask(String text){
 
-        date = dateTimeActivity.getDate();
-        time = dateTimeActivity.getTime();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Task task = new Task(text, false, userId, time, date);
 
@@ -231,15 +235,42 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     }
 
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        String currentDate = DateFormat.getInstance().format(calendar.getTime());
 
-        txtDateTime.setText(currentDate);
+    public void showDateTimeDialog(){
+        final Calendar calendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+                calendar.set(Calendar.YEAR,year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
+                date = simpleDateFormat.format(calendar.getTime());
+
+                TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        calendar.set(Calendar.MINUTE, minute);
+
+                        SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("HH:mm");
+                        time = simpleDateFormat1.format(calendar.getTime());
+
+                        txtDateTime.setVisibility(View.VISIBLE );
+                        txtDateTime.setText(date + " - " + time);
+
+
+                    }
+                };
+
+                new TimePickerDialog(MainActivity.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+            }
+
+        };
+
+        new DatePickerDialog(MainActivity.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
 
     }
 }

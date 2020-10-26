@@ -10,7 +10,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".DateTimeActivity" android:theme="@style/Theme.custom" >  </activity>
 
         <activity android:name=".newTask" />
         <activity android:name=".ProfileActivity" />
