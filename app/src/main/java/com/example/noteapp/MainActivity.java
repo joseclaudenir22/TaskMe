@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.firebase.ui.auth.AuthUI;
@@ -25,12 +26,16 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.CalendarContract;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -79,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         btnAdd      = (Button) bottomSheetDialogView.findViewById(R.id.btnAdd);
 
 
-        //chama a bottomsheet pelo FAB
+        //chamar a bottomsheet pelo FAB
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,10 +97,11 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         });
 
 
-        //adiciona tarefa no Firebase
+        //adicionar tarefa no Firebase
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 addTask(taskName.getText().toString());
                 bottomSheetDialog.dismiss();
             }
@@ -122,6 +128,35 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                         }
                     });
         }*/
+
+        taskName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String taskInput = taskName.getText().toString().trim();
+
+                btnAdd.setEnabled(!taskInput.isEmpty());
+                if(btnAdd.isEnabled()){
+                    btnAdd.setTextColor(getResources().getColor(R.color.colorAccent));
+                    btnAdd.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_add, 0, 0, 0);
+                } else {
+                    btnAdd.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    btnAdd.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_add_inactive, 0, 0, 0);
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private void addNote(String text){
@@ -274,4 +309,5 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         new DatePickerDialog(MainActivity.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
 
     }
+
 }

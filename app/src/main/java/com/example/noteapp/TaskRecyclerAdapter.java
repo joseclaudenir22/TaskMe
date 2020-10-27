@@ -12,12 +12,6 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 public class TaskRecyclerAdapter extends FirestoreRecyclerAdapter<Task, TaskRecyclerAdapter.TaskViewHolder> {
 
 
-    /**
-     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
-     * FirestoreRecyclerOptions} for configuration options.
-     *
-     * @param options
-     */
     public TaskRecyclerAdapter(@NonNull FirestoreRecyclerOptions<Task> options) {
         super(options);
     }

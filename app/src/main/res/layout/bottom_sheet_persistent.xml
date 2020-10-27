@@ -14,14 +14,16 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/TaskInput"
-        android:layout_width="130dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="25dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="16dp"
         app:hintEnabled="false"
         tools:ignore="InvalidId"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+
+        >
 
         <EditText
             android:id="@+id/taskName"
@@ -33,7 +35,9 @@
             android:layout_marginRight="1dp"
             android:layout_marginEnd="1dp"
             android:hint="New Item"
-            android:background="@android:color/transparent" />
+            android:background="@color/fui_transparent"
+
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -46,34 +50,42 @@
         android:padding="5dp"
         android:textColor="#747474"
         android:visibility="invisible"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TaskInput"
         />
 
     <Button
         android:id="@+id/btnDatePicker"
-        android:layout_width="25dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TaskInput"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="48dp"
+        android:layout_height="49dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="45dp"
+        android:paddingLeft="0dp"
         android:background="@color/fui_transparent"
+        android:backgroundTint="@color/fui_transparent"
         android:drawableLeft="@drawable/date_24"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TaskInput" />
 
     <Button
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_marginLeft="200dp"
         android:layout_marginTop="50dp"
-        android:layout_marginLeft="230dp"
+        android:layout_marginRight="25dp"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:text="Adicionar"
-        android:textColor="@color/colorAccent"
+        android:enabled="false"
+        android:textColor="@color/colorPrimary"
+        android:backgroundTint="@color/fui_transparent"
+        android:drawableLeft="@drawable/ic_add_inactive"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnDatePicker"
         app:layout_constraintTop_toBottomOf="@+id/TaskInput"
-        app:layout_constraintStart_toEndOf="@+id/btnDatePicker"/>
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

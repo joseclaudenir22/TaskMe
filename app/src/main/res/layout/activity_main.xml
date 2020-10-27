@@ -19,7 +19,7 @@
         android:backgroundTint="@color/colorAccent"
         app:menu="@menu/bottom_app_bar"
         app:fabAlignmentMode="end"
-        app:fabAnimationMode="scale"
+        app:fabAnimationMode="slide"
         />
 
 
@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/fab_add"
         app:layout_anchor="@id/bottomAppBar"
+        app:rippleColor="@color/colorAccent"
 
     />
 
