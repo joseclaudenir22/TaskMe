@@ -20,6 +20,9 @@ public class Task {
         this.date       = date;
     }
 
+    public String getDateTime() {
+        return date + time;
+    }
     public String getTime() {
        return time;
     }

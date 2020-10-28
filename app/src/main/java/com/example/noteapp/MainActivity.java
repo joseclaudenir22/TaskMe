@@ -21,6 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.base.MoreObjects;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     TextView txtDateTime;
     Button btnTime, btnAdd;
     EditText taskName;
+    TaskRecyclerAdapter taskRecyclerAdapter;
     private BottomSheetDialog bottomSheetDialog;
 
     @Override
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         setSupportActionBar(bottomAppBar);
 
         recyclerView    = findViewById(R.id.recyclerView);
+
 
         //cria instância do bottomSheet
         bottomSheetDialog = new BottomSheetDialog(MainActivity.this);
@@ -242,6 +245,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
             return;
         }
 
+        initRecyclerView(firebaseAuth.getCurrentUser());
+
         Log.d(TAG, "onAuthStateChanged: userUid " + firebaseAuth.getCurrentUser().getUid());
 
     }
@@ -307,6 +312,12 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         };
 
         new DatePickerDialog(MainActivity.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+
+    }
+
+    private void initRecyclerView(FirebaseUser user){
+
+
 
     }
 
