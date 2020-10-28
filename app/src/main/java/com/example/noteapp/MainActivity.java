@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,12 +26,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.CalendarContract;
@@ -73,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         setSupportActionBar(bottomAppBar);
 
         recyclerView    = findViewById(R.id.recyclerView);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL ));
 
 
         //cria instância do bottomSheet
@@ -212,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     @Override
     protected void onStart() {
-        taskName.requestFocus();
+
         super.onStart();
         FirebaseAuth.getInstance().addAuthStateListener(this);
     }
@@ -222,12 +226,16 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
         super.onStop();
         FirebaseAuth.getInstance().removeAuthStateListener(this);
+
+        if (taskRecyclerAdapter != null){
+            taskRecyclerAdapter.stopListening();
+        }
     }
 
 
     @Override
     protected void onResume() {
-        taskName.requestFocus();
+
         super.onResume();
     }
 
@@ -287,7 +295,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                 calendar.set(Calendar.MONTH, month);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM");
                 date = simpleDateFormat.format(calendar.getTime());
 
                 TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
@@ -307,6 +315,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                 };
 
                 new TimePickerDialog(MainActivity.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+
             }
 
         };
@@ -317,6 +326,19 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     private void initRecyclerView(FirebaseUser user){
 
+        //exibindo as Tasks do usuário específico
+        Query query = FirebaseFirestore.getInstance().
+                collection("tasks")
+                .whereEqualTo("userId", user.getUid());
+
+        FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
+                .setQuery(query, Task.class)
+                .build();
+
+        taskRecyclerAdapter = new TaskRecyclerAdapter(options);
+        recyclerView.setAdapter(taskRecyclerAdapter);
+
+        taskRecyclerAdapter.startListening();
 
 
     }

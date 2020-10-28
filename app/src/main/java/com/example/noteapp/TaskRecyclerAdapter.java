@@ -1,6 +1,8 @@
 package com.example.noteapp;
 
+import android.icu.text.UFormat;
 import android.os.Build;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.Format;
+import java.text.ParseException;
+import java.util.Date;
+
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -24,13 +29,11 @@ public class TaskRecyclerAdapter extends FirestoreRecyclerAdapter<Task, TaskRecy
         super(options);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onBindViewHolder(@NonNull TaskViewHolder holder, int position, @NonNull Task task) {
 
         holder.taskTextView.setText(task.getText());
-        CharSequence dateCharSeq = (CharSequence) new SimpleDateFormat("d, MMM \nHH:mm", Locale.forLanguageTag(task.getDateTime()));
-        holder.dateTextView.setText(dateCharSeq);
+        holder.dateTextView.setText(task.getDate()  + " \n " + task.getTime());
 
 
     }

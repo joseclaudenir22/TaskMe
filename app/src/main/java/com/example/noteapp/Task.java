@@ -1,16 +1,18 @@
 package com.example.noteapp;
 
 
+import java.sql.Timestamp;
+
 public class Task {
 
     private String  text;
     private String  userId;
     private String  time;
     private String  date;
+    private Timestamp datetime;
     private boolean completed;
 
-    public Task(String text, boolean b, String userId) {
-    }
+   public Task(){};
 
     public Task(String text, boolean completed, String userId, String time, String date) {
         this.text       = text;
