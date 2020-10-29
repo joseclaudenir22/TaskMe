@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <corners
         android:radius="20dp"
@@ -7,8 +7,8 @@
 
 
 
-    <stroke android:color="#747474"
-        android:width="2dp"
+    <stroke android:color="@color/colorAccent"
+        android:width="0.7dp"
         />
 
     <padding

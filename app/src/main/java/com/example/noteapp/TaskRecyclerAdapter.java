@@ -33,7 +33,7 @@ public class TaskRecyclerAdapter extends FirestoreRecyclerAdapter<Task, TaskRecy
     protected void onBindViewHolder(@NonNull TaskViewHolder holder, int position, @NonNull Task task) {
 
         holder.taskTextView.setText(task.getText());
-        holder.dateTextView.setText(task.getDate()  + " \n " + task.getTime());
+        holder.dateTextView.setText(task.getDate()  + " " + task.getTime());
 
 
     }

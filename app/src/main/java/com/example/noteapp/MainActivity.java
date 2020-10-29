@@ -44,6 +44,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         setSupportActionBar(bottomAppBar);
 
         recyclerView    = findViewById(R.id.recyclerView);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL ));
+        //recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL ));
 
 
         //cria instância do bottomSheet
@@ -287,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     public void showDateTimeDialog(){
         final Calendar calendar = Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+        final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
@@ -295,28 +296,30 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                 calendar.set(Calendar.MONTH, month);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd 'de' MMM");
                 date = simpleDateFormat.format(calendar.getTime());
 
-                TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+
+                final TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         calendar.set(Calendar.MINUTE, minute);
 
-                        SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("HH:mm");
+                        SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("HH'h'mm");
                         time = simpleDateFormat1.format(calendar.getTime());
 
                         txtDateTime.setVisibility(View.VISIBLE );
-                        txtDateTime.setText(date + " - " + time);
-
+                        txtDateTime.setText(date + " " + time);
 
                     }
                 };
 
-                new TimePickerDialog(MainActivity.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+               new TimePickerDialog(MainActivity.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+
 
             }
+
 
         };
 
