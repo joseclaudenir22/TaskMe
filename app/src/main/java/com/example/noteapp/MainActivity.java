@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -58,7 +59,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
+public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener, TaskRecyclerAdapter.TaskListener {
 
     private static final String TAG = "MainActivity";
     RecyclerView recyclerView;
@@ -338,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                 .setQuery(query, Task.class)
                 .build();
 
-        taskRecyclerAdapter = new TaskRecyclerAdapter(options);
+        taskRecyclerAdapter = new TaskRecyclerAdapter(options, this);
         recyclerView.setAdapter(taskRecyclerAdapter);
 
         taskRecyclerAdapter.startListening();
@@ -346,4 +347,10 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     }
 
+    @Override
+    public void handleCheckChange(boolean isChecked, DocumentSnapshot documentSnapshot) {
+
+        Log.d(TAG, "handleCheckChanged: " + isChecked);
+
+    }
 }

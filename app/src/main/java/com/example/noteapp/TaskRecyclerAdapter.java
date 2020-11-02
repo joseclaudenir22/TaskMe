@@ -6,6 +6,8 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,15 +20,18 @@ import java.util.Date;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class TaskRecyclerAdapter extends FirestoreRecyclerAdapter<Task, TaskRecyclerAdapter.TaskViewHolder> {
 
+    TaskListener taskListener;
 
-    public TaskRecyclerAdapter(@NonNull FirestoreRecyclerOptions<Task> options) {
+    public TaskRecyclerAdapter(@NonNull FirestoreRecyclerOptions<Task> options, TaskListener taskListener) {
         super(options);
+        this.taskListener = taskListener;
     }
 
     @Override
@@ -49,14 +54,29 @@ public class TaskRecyclerAdapter extends FirestoreRecyclerAdapter<Task, TaskRecy
 
     class TaskViewHolder extends RecyclerView.ViewHolder {
 
-        TextView taskTextView, dateTextView, timeTextView;
+        TextView taskTextView, dateTextView;
+        CheckBox checkBox;
 
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
 
             taskTextView = itemView.findViewById(R.id.taskTextView);
             dateTextView = itemView.findViewById(R.id.dateTextView);
+            checkBox     = itemView.findViewById(R.id.checkBox);
+            
+
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(getAdapterPosition());
+                    taskListener.handleCheckChange(isChecked, documentSnapshot);
+                }
+            });
 
         }
+    }
+
+    interface TaskListener {
+        public void handleCheckChange(boolean isChecked, DocumentSnapshot documentSnapshot);
     }
 }
