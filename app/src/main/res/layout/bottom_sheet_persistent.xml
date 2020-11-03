@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottomSheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="#ffffff"
     android:paddingBottom="20dp"
     app:behavior_hideable="true"
     app:behavior_peekHeight="16dp"
@@ -16,45 +14,44 @@
         android:id="@+id/TaskInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="0dp"
-        android:layout_marginLeft="16dp"
         app:hintEnabled="false"
-        tools:ignore="InvalidId"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-
+        tools:ignore="InvalidId"
+        app:boxBackgroundMode="none"
         >
 
         <EditText
             android:id="@+id/taskName"
-            android:layout_width="match_parent"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_marginLeft="1dp"
             android:layout_marginStart="1dp"
-            android:layout_marginRight="1dp"
+            android:layout_marginLeft="1dp"
             android:layout_marginEnd="1dp"
-            android:hint="New Item"
-            android:background="@color/fui_transparent"
-
+            android:layout_marginRight="1dp"
+            android:background="@android:color/transparent"
+            android:hint="Nova Tarefa"
+            android:textColor="@color/colorPrimaryDark"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/txtDateTime"
-        android:background="@drawable/bd_date_time_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:padding="5dp"
-        android:textColor="#747474"
-        android:visibility="invisible"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="10dp"
+        android:background="@drawable/bd_date_time_txt"
+        android:padding="5dp"
+        android:text=""
+        android:textColor="#747474"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TaskInput"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/TaskInput" />
 
     <Button
         android:id="@+id/btnDatePicker"
@@ -63,29 +60,28 @@
         android:layout_height="49dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="45dp"
-        android:paddingLeft="0dp"
         android:background="@color/fui_transparent"
         android:backgroundTint="@color/fui_transparent"
         android:drawableLeft="@drawable/date_24"
+        android:paddingLeft="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TaskInput" />
 
     <Button
         android:id="@+id/btnAdd"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="200dp"
         android:layout_marginTop="50dp"
         android:layout_marginRight="25dp"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:text="Adicionar"
-        android:enabled="false"
-        android:textColor="@color/colorPrimary"
         android:backgroundTint="@color/fui_transparent"
         android:drawableLeft="@drawable/ic_add_inactive"
+        android:enabled="false"
+        android:text="Adicionar"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnDatePicker"
-        app:layout_constraintTop_toBottomOf="@+id/TaskInput"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/TaskInput" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

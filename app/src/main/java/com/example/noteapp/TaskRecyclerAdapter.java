@@ -69,7 +69,20 @@ public class TaskRecyclerAdapter extends FirestoreRecyclerAdapter<Task, TaskRecy
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(getAdapterPosition());
-                    taskListener.handleCheckChange(isChecked, documentSnapshot);
+                    Task task = getItem(getAdapterPosition());
+                    if(task.isCompleted() != isChecked){
+                        taskListener.handleCheckChange(isChecked, documentSnapshot);
+                    }
+
+                }
+            });
+
+            //verifica quando o item no RV é selecionado
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(getAdapterPosition());
+                    taskListener.handleEditTask(documentSnapshot);
                 }
             });
 
@@ -78,5 +91,7 @@ public class TaskRecyclerAdapter extends FirestoreRecyclerAdapter<Task, TaskRecy
 
     interface TaskListener {
         public void handleCheckChange(boolean isChecked, DocumentSnapshot documentSnapshot);
+        public void handleEditTask(DocumentSnapshot documentSnapshot);
     }
+
 }

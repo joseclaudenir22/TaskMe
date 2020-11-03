@@ -351,6 +351,26 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     public void handleCheckChange(boolean isChecked, DocumentSnapshot documentSnapshot) {
 
         Log.d(TAG, "handleCheckChanged: " + isChecked);
+        documentSnapshot.getReference().update("completed", isChecked)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+    }
+
+    //editando Tarefa
+    @Override
+    public void handleEditTask(DocumentSnapshot documentSnapshot) {
+            Task task = documentSnapshot.toObject(Task.class);
 
     }
 }
