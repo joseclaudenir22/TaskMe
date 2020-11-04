@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -92,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         taskName    = (EditText) bottomSheetDialogView.findViewById(R.id.taskName);
         btnAdd      = (Button) bottomSheetDialogView.findViewById(R.id.btnAdd);
 
-
         //chamar a bottomsheet pelo FAB
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +105,13 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
             }
         });
 
+        //reseta a BottomSheet quando fechada
+        bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                resetBottomSheet();
+            }
+        });
 
         //adicionar tarefa no Firebase
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
                 addTask(taskName.getText().toString());
                 bottomSheetDialog.dismiss();
+                resetBottomSheet();
+                
             }
         });
 
@@ -297,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                 calendar.set(Calendar.MONTH, month);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd 'de' MMM");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM - ");
                 date = simpleDateFormat.format(calendar.getTime());
 
 
@@ -371,6 +380,17 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     @Override
     public void handleEditTask(DocumentSnapshot documentSnapshot) {
             Task task = documentSnapshot.toObject(Task.class);
+            taskName.setText(task.getText());
+            txtDateTime.setText(task.getDate());
+            bottomSheetDialog.show();
+
+
+    }
+    
+    public void resetBottomSheet(){
+        taskName.getText().clear();
+        txtDateTime.setText(null);
+        txtDateTime.setVisibility(View.INVISIBLE);
 
     }
 }
